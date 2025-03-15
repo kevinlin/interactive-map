@@ -1,0 +1,27 @@
+# Streamlit
+__pycache__/
+*.pyc
+
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# IDE/Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*.DS_Store
+
+# Miscellaneous
+*.log
+*.sqlite
+*.db
+*.csv
+*.json
+
+# OS generated files
+.DS_Store
+Thumbs.db
