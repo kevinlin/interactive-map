@@ -2,7 +2,7 @@ import streamlit as st
 from streamlit_image_coordinates import streamlit_image_coordinates
 from PIL import Image, ImageDraw
 
-st.set_page_config("Interactive Rainforest Wild Asia Map", layout="centered")
+st.set_page_config("Interactive Rainforest Wild Asia Map", layout="wide")
 
 st.title("🌳 Rainforest Wild Asia Interactive Map")
 
