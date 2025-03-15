@@ -2,7 +2,7 @@ import streamlit as st
 from streamlit_image_coordinates import streamlit_image_coordinates
 from PIL import Image, ImageDraw
 
-st.set_page_config("Interactive Rainforest Wild Asia Map", layout="wide")
+st.set_page_config("Interactive Rainforest Wild Asia Map", layout="centered")
 
 st.title("🌳 Rainforest Wild Asia Interactive Map")
 
@@ -64,10 +64,9 @@ if coords:
             break
 
     if selected:
-        with details_placeholder.container():
-            st.markdown(f"### 📍 {selected}")
-            st.info(itinerary_details[selected])
+        with details_placeholder.expander(f"📍 {selected}", expanded=True):
+            st.write(itinerary_details[selected])
     else:
-        details_placeholder.warning("Please click directly within a highlighted circle.")
+        details_placeholder.warning("Tap directly within a highlighted circle.")
 else:
-    details_placeholder.info("Click on any highlighted area on the map above to see details.")
+    details_placeholder.info("Tap any highlighted area on the map above to see details.")
