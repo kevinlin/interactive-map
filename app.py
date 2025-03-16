@@ -42,31 +42,33 @@ itinerary_details = {
     "The Cavern": "2.00pm: Explore The Cavern, inspired by the Mulu caves in Sarawak, Malaysia, where you can find Cave racer snakes and Asian forest scorpions! End your cave exploration with a stunning photo at The Oculus!"
 }
 
-# Draw clickable area highlights
-overlay = Image.new("RGBA", original_img.size, (255, 255, 255, 0))
-draw = ImageDraw.Draw(overlay)
-radius = 15
-for x, y in itinerary_points.values():
-    draw.ellipse((x - radius, y - radius, x + radius, y + radius), outline='yellow', width=3, fill=(255, 255, 0, 60))
+# Sidebar for itinerary details
+selected_poi = st.sidebar.selectbox("📍 Select a Point of Interest", list(itinerary_points.keys()))
 
-img_with_highlights = Image.alpha_composite(original_img, overlay)
+# Draw clickable area highlights
+def generate_highlighted_image(selected_point=None):
+    overlay = Image.new("RGBA", original_img.size, (255, 255, 255, 0))
+    draw = ImageDraw.Draw(overlay)
+    radius = 15  # Radius for touch/click
+    for name, (x, y) in itinerary_points.items():
+        color = 'yellow' if name != selected_point else 'red'
+        draw.ellipse((x - radius, y - radius, x + radius, y + radius), outline='yellow', width=3,
+                     fill=(255, 255, 0, 60))
+    return Image.alpha_composite(original_img, overlay)
 
 # Display interactive image
-details_placeholder = st.empty()
+img_with_highlights = generate_highlighted_image(selected_poi)
 coords = streamlit_image_coordinates(img_with_highlights, key="interactive_map")
 
 if coords:
     clicked_x, clicked_y = coords['x'], coords['y']
-    selected = None
+    selected_poi = None
     for name, (x, y) in itinerary_points.items():
-        if (clicked_x - x) ** 2 + (clicked_y - y) ** 2 <= radius ** 2:
-            selected = name
+        if (clicked_x - x) ** 2 + (clicked_y - y) ** 2 <= 25 ** 2:
+            selected_poi = name
             break
 
-    if selected:
-        with details_placeholder.expander(f"📍 {selected}", expanded=True):
-            st.write(itinerary_details[selected])
-    else:
-        details_placeholder.warning("Tap directly within a highlighted circle.")
-else:
-    details_placeholder.info("Tap any highlighted area on the map above to see details.")
+# Display itinerary in sidebar
+for poi in itinerary_points.keys():
+    with st.sidebar.expander(f"📍 {poi}", expanded=(poi == selected_poi)):
+        st.write(itinerary_details[poi])
